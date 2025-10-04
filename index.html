@@ -1,26 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Impact Risk Navigator - Desafio NASA 12</title>
 
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.121/Build/Cesium/Cesium.js"></script>
-    <link href="https://cesium.com/downloads/cesiumjs/releases/1.121/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <style>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.121/Build/Cesium/Widgets/widgets.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <style>
         body {
             margin: 0;
-            overflow: hidden; 
+            overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
         }
-
-        #cesiumContainer {
-            width: 100vw;
-            height: 100vh;
-        }
-
-        /* Painel de Controle (Simulação) */
+        #cesiumContainer { width: 100vw; height: 100vh; }
         #cockpit {
             position: absolute;
             top: 15px;
@@ -34,135 +29,32 @@
             max-width: 380px;
             transition: border-color 0.5s;
         }
-
-        h2 {
-            color: #76E0F3;
-            margin-top: 0;
-            border-bottom: 2px solid #76E0F3;
-            padding-bottom: 10px;
-        }
-
-        .data-display {
-            margin-bottom: 12px;
-            padding: 5px;
-            border-bottom: 1px dashed #334;
-        }
-
-        .data-display label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 3px;
-            color: #ccc; 
-            font-size: 0.9em;
-        }
-        
-        #asteroid-select {
-            width: 100%;
-            padding: 8px;
-            border-radius: 4px;
-            background-color: #333;
-            color: white;
-            border: 1px solid #555;
-            margin-bottom: 10px;
-        }
-        
-        #asteroid-name {
-            font-weight: bold;
-            color: #FFD700;
-        }
-        
-        /* Sistema de Alerta/Notificação */
-        #alert-box {
-            display: flex;
-            align-items: center;
-            background-color: #e54c4c; /* Padrão: Alto Risco */
-            color: white;
-            padding: 10px;
-            border-radius: 6px;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        #alert-box.low-risk {
-            background-color: #4CAF50; /* Baixo Risco */
-        }
-
-        #alert-box i {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        #risk-population, #risk-radius {
-            font-weight: bold;
-            font-size: 1.2em;
-            color: #e54c4c;
-        }
-        
-        #risk-population.low-risk {
-            color: #4CAF50;
-        }
-
-        p {
-            font-size: 0.8em;
-            color: #aaa;
-            margin-top: 15px;
-        }
-
-        button {
-            background-color: #e54c4c;
-            color: white;
-            border: none;
-            padding: 12px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 15px;
-            cursor: pointer;
-            border-radius: 6px;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
-
-        button:hover:not(:disabled) {
-            background-color: #d13f3f;
-        }
-        
-        button:disabled {
-            background-color: #555;
-            cursor: not-allowed;
-        }
-
-        #mitigation-section {
-            margin-top: 25px;
-            border-top: 1px solid #76E0F3;
-            padding-top: 15px;
-        }
-        #mitigation-slider-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-
-        #iot-data-display {
-            padding: 10px 0;
-            font-size: 0.9em;
-        }
-
-        #iot-data-display a {
-            color: #00FF00;
-            text-decoration: none;
-        }
+        h2 { color: #76E0F3; margin-top: 0; border-bottom: 2px solid #76E0F3; padding-bottom: 10px; }
+        .data-display { margin-bottom: 12px; padding: 5px; border-bottom: 1px dashed #334; }
+        .data-display label { font-weight: bold; display: block; margin-bottom: 3px; color: #ccc; font-size: 0.9em; }
+        #asteroid-select { width: 100%; padding: 8px; border-radius: 4px; background-color: #333; color: white; border: 1px solid #555; margin-bottom: 10px; }
+        #asteroid-name { font-weight: bold; color: #FFD700; }
+        #alert-box { display:flex; align-items:center; background-color:#e54c4c; color:white; padding:10px; border-radius:6px; margin-top:10px; font-weight:bold; }
+        #alert-box.low-risk { background-color:#4CAF50; }
+        #alert-box i { margin-right:10px; font-size:1.2em; }
+        #risk-population, #risk-radius { font-weight:bold; font-size:1.2em; color:#e54c4c; }
+        #risk-population.low-risk { color:#4CAF50; }
+        p { font-size:0.8em; color:#aaa; margin-top:15px; }
+        button { background-color:#e54c4c; color:white; border:none; padding:12px 15px; font-size:16px; margin-top:15px; cursor:pointer; border-radius:6px; width:100%; transition:background-color 0.3s; }
+        button:hover:not(:disabled) { background-color:#d13f3f; }
+        button:disabled { background-color:#555; cursor:not-allowed; }
+        #mitigation-section { margin-top:25px; border-top:1px solid #76E0F3; padding-top:15px; }
+        #mitigation-slider-label { display:flex; justify-content:space-between; font-size:0.9em; margin-bottom:5px; }
+        #iot-data-display { padding:10px 0; font-size:0.9em; }
+        #iot-data-display a { color:#00FF00; text-decoration:none; }
     </style>
 </head>
 <body>
-
     <div id="cesiumContainer"></div>
 
     <div id="cockpit">
         <h2>Impact Risk Navigator</h2>
-        
+
         <div class="data-display">
             <label for="asteroid-select">Catálogo de Ameaças:</label>
             <select id="asteroid-select" disabled>
@@ -181,14 +73,14 @@
             <label>Velocidade (km/s):</label>
             <span id="asteroid-velocity">--</span>
         </div>
-        
+
         <p>1. Escolha um asteroide. 2. Clique no globo para selecionar o local do impacto simulado.</p>
-        
+
         <div class="data-display" id="location-display" style="display: none;">
             <label>Localização Selecionada:</label>
             <span id="impact-location">--</span>
         </div>
-        
+
         <button id="simulate-btn" disabled>EXECUTAR SIMULAÇÃO DE IMPACTO</button>
 
         <div id="mitigation-section">
@@ -197,11 +89,10 @@
                 <label>Redução de Diâmetro (Deflexão):</label>
                 <span id="mitigation-value">0%</span>
             </div>
-            <input type="range" id="mitigation-slider" min="0" max="50" value="0" style="width: 100%;">
+            <input type="range" id="mitigation-slider" min="0" max="50" value="0" style="width:100%;">
         </div>
 
-
-        <div style="margin-top: 25px; border-top: 1px solid #76E0F3; padding-top: 15px;">
+        <div style="margin-top:25px; border-top:1px solid #76E0F3; padding-top:15px;">
             <h3>Resultados da Simulação</h3>
             <div id="alert-box">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -216,46 +107,33 @@
                 <span id="risk-radius">0 km</span>
             </div>
         </div>
-        
-        <div class="data-display" style="border-bottom: none;">
+
+        <div class="data-display" style="border-bottom:none;">
             <label>Saída de Dados IOT/Webhook:</label>
             <div id="iot-data-display">
-                <p style="font-size: 0.8em; color: #aaa;"><i class="fas fa-microchip"></i> Aguardando Simulação...</p>
+                <p style="font-size:0.8em; color:#aaa;"><i class="fas fa-microchip"></i> Aguardando Simulação...</p>
             </div>
         </div>
     </div>
 
     <script>
-        // ************************************************************
-        // PASSO 1: SUBSTITUA SEU TOKEN CESIUM AQUI
-        // ************************************************************
-        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhYWYyMWNkZS1kNTAzLTQzYjAtYjJiYy1lZTRmMmQ4Zjg0OTgiLCJpZCI6MzQ3MDExLCJpYXQiOjE3NTk1NDcyNjl9.uQLIlxiUk9EnkumxwepPgZYiubiKs_pRhLQfbIX2f64'; 
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhYWYyMWNkZS1kNTAzLTQzYjAtYjJiYy1lZTRmMmQ4Zjg0OTgiLCJpZCI6MzQ3MDExLCJpYXQiOjE3NTk1NDcyNjl9.uQLIlxiUk9EnkumxwepPgZYiubiKs_pRhLQfbIX2f64';
+        const NASA_API_KEY = 'vUKEyppBObY9lqG1ALMj4ACX9Ff7rW4RyTnsjsiT';
 
-        // ************************************************************
-        // PASSO 2: CHAVE DA NASA (DEMO_KEY para estabilidade)
-        // ************************************************************
-        const NASA_API_KEY = 'DEMO_KEY'; 
-
-
-        // ----------------------------------------------------
-        // 1. Configuração do Mapa 3D (Cesium Viewer)
-        // ----------------------------------------------------
-
-        let viewer; 
-        let allAsteroids = {}; 
+        let viewer;
+        let allAsteroids = {};
 
         async function initializeCesiumViewer() {
             viewer = new Cesium.Viewer('cesiumContainer', {
-                baseLayerPicker: false, 
+                baseLayerPicker: false,
                 animation: false,
                 timeline: false,
-                sceneModePicker: true, 
-                navigationHelpButton: true, 
-                navigationInstructionsInitiallyVisible: true, 
+                sceneModePicker: true,
+                navigationHelpButton: true,
+                navigationInstructionsInitiallyVisible: true,
                 geocoder: false,
-                homeButton: true, 
-                imageryProvider: false, 
-                
+                homeButton: true,
+                imageryProvider: false,
                 skyBox: new Cesium.SkyBox({
                     sources : {
                         positiveX : Cesium.buildModuleUrl('Assets/Textures/SkyBox/tycho2t3_80_px.jpg'),
@@ -268,119 +146,87 @@
                 })
             });
 
-            // CORREÇÃO IMAGEM: Adiciona a camada de alta resolução do Asset ID (async)
             try {
                 const ionLayer = viewer.imageryLayers.addImageryProvider(
                     await Cesium.IonImageryProvider.fromAssetId(3830183)
                 );
-                ionLayer.alpha = 0.9; 
+                ionLayer.alpha = 0.9;
             } catch (error) {
-                // Se falhar, usa OpenStreetMap para garantir que a Terra apareça
                 viewer.imageryLayers.addImageryProvider(
-                    new Cesium.OpenStreetMapImageryProvider({
-                        url : 'https://a.tile.openstreetmap.org/'
-                    })
+                    new Cesium.OpenStreetMapImageryProvider({ url: 'https://a.tile.openstreetmap.org/' })
                 );
             }
-            
-            viewer.camera.flyHome(0); 
-            
+
+            viewer.camera.flyHome(0);
             fetchAsteroidData();
             setupInteractionHandlers();
             updateAlertBox("Aguardando Simulação...", undefined);
         }
 
-        
-        // ----------------------------------------------------
-        // 2. Variáveis Globais de Dados e UI
-        // ----------------------------------------------------
-
-        let currentAsteroidData = {
-            name: "Nenhum",
-            diameterMeters: 1, 
-            velocityKms: 1,
-        };
+        let currentAsteroidData = { name: "Nenhum", diameterMeters: 1, velocityKms: 1 };
         let impactCoordinates = null;
-        
+
         const simulateButton = document.getElementById('simulate-btn');
         const mitigationSlider = document.getElementById('mitigation-slider');
         const mitigationValueSpan = document.getElementById('mitigation-value');
         const asteroidSelect = document.getElementById('asteroid-select');
 
-        // Dados estáticos de cidades (apenas para checagem de proximidade)
         const majorCities = [
             { name: "São Paulo", lat: -23.55, lon: -46.63, population: 12000000 },
             { name: "New York", lat: 40.71, lon: -74.00, population: 8400000 },
             { name: "Tokyo", lat: 35.68, lon: 139.65, population: 13900000 },
-            { name: "London", lat: 51.50, lon: 0.12, population: 8900000 },
+            { name: "London", lat: 51.50, lon: 0.12, population: 8900000 }
         ];
-        
-        // NOVIDADE: Densidade Populacional Média (Pessoas/Km²)
-        const regionDensity = {
-            high_density_area: 2500, // Simulação para Metrópoles
-            medium_density_area: 200, // Simulação para áreas suburbanas
-            low_density_area: 15, // Simulação para áreas rurais/baixa ocupação
-        };
 
-        // ----------------------------------------------------
-        // 3. Integração com a API da NASA (NeoWs)
-        // ----------------------------------------------------
+        const regionDensity = { high_density_area: 2500, medium_density_area: 200, low_density_area: 15 };
 
         async function fetchAsteroidData() {
             const today = new Date().toISOString().slice(0, 10);
             const url = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${today}&end_date=${today}&api_key=${NASA_API_KEY}`;
-            
+
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                
+
                 allAsteroids = {};
-                
                 let count = 0;
                 let firstAsteroidId = null;
 
-                for (const date in data.near_earth_objects) {
-                    data.near_earth_objects[date].forEach(neo => {
-                        const id = neo.id;
-                        if (!firstAsteroidId) firstAsteroidId = id;
+                if (data.near_earth_objects) {
+                    for (const date in data.near_earth_objects) {
+                        data.near_earth_objects[date].forEach(neo => {
+                            const id = neo.id;
+                            if (!firstAsteroidId) firstAsteroidId = id;
 
-                        const diameterAvg = 
-                            (neo.estimated_diameter.meters.estimated_diameter_min + 
-                             neo.estimated_diameter.meters.estimated_diameter_max) / 2;
-                             
-                        const velocity = 
-                            parseFloat(neo.close_approach_data[0].relative_velocity.kilometers_per_second);
+                            const diameterAvg = (neo.estimated_diameter.meters.estimated_diameter_min + neo.estimated_diameter.meters.estimated_diameter_max) / 2;
+                            const velocity = parseFloat(neo.close_approach_data[0].relative_velocity.kilometers_per_second);
 
-                        allAsteroids[id] = {
-                            name: neo.name,
-                            diameterMeters: diameterAvg,
-                            velocityKms: velocity
-                        };
-                        count++;
-                    });
+                            allAsteroids[id] = { name: neo.name, diameterMeters: diameterAvg, velocityKms: velocity };
+                            count++;
+                        });
+                    }
                 }
-                
+
                 populateAsteroidSelector(allAsteroids);
-                
+
                 if (count > 0 && firstAsteroidId) {
                     selectAsteroid(firstAsteroidId);
                 } else {
-                    selectAsteroid('static'); 
+                    selectAsteroid('static');
                 }
             } catch (error) {
                 console.error("Erro na API da NASA. Usando dados estáticos.", error);
-                selectAsteroid('static'); 
+                selectAsteroid('static');
             }
         }
-        
+
         function populateAsteroidSelector(asteroids) {
             asteroidSelect.innerHTML = '';
-            
             if (Object.keys(asteroids).length === 0) {
-                 const option = document.createElement('option');
-                 option.value = 'static';
-                 option.textContent = 'Impactor-2025 (Simulação Estática)';
-                 asteroidSelect.appendChild(option);
+                const option = document.createElement('option');
+                option.value = 'static';
+                option.textContent = 'Impactor-2025 (Simulação Estática)';
+                asteroidSelect.appendChild(option);
             } else {
                 for (const id in asteroids) {
                     const option = document.createElement('option');
@@ -397,9 +243,9 @@
             if (id === 'static') {
                 currentAsteroidData = { name: "Impactor-2025 (Simulação)", diameterMeters: 250, velocityKms: 30 };
             } else if (allAsteroids[id]) {
-                 currentAsteroidData = allAsteroids[id];
+                currentAsteroidData = allAsteroids[id];
             } else {
-                 currentAsteroidData = { name: "Impactor-2025 (Simulação)", diameterMeters: 250, velocityKms: 30 };
+                currentAsteroidData = { name: "Impactor-2025 (Simulação)", diameterMeters: 250, velocityKms: 30 };
             }
             updateCockpitUI();
             document.getElementById('risk-population').textContent = '0';
@@ -408,44 +254,38 @@
             if (viewer) viewer.entities.removeAll();
         }
 
-
-        // ----------------------------------------------------
-        // 4. Funções de Cálculo e Visualização
-        // ----------------------------------------------------
-
         function updateCockpitUI() {
             document.getElementById('asteroid-name').textContent = currentAsteroidData.name;
             document.getElementById('asteroid-diameter').textContent = `${currentAsteroidData.diameterMeters.toFixed(2)} m`;
             document.getElementById('asteroid-velocity').textContent = `${currentAsteroidData.velocityKms.toFixed(2)} km/s`;
-            
             document.getElementById('location-display').style.display = impactCoordinates ? 'block' : 'none';
         }
-        
+
         function updateAlertBox(message, population) {
             const alertBox = document.getElementById('alert-box');
             const icon = alertBox.querySelector('i');
-            
+
             document.getElementById('alert-message').textContent = message;
 
             if (population === undefined || message === "Aguardando Simulação...") {
                 alertBox.classList.remove('low-risk');
                 icon.className = 'fas fa-exclamation-triangle';
-                alertBox.style.backgroundColor = '#555'; 
+                alertBox.style.backgroundColor = '#555';
                 document.getElementById('cockpit').style.borderColor = '#76E0F3';
             } else if (population > 500000) {
                 alertBox.classList.remove('low-risk');
                 icon.className = 'fas fa-skull-crossbones';
-                alertBox.style.backgroundColor = '#e54c4c'; // Vermelho
+                alertBox.style.backgroundColor = '#e54c4c';
                 document.getElementById('cockpit').style.borderColor = '#e54c4c';
             } else if (population > 100000) {
                 alertBox.classList.remove('low-risk');
                 icon.className = 'fas fa-bell';
-                alertBox.style.backgroundColor = '#FFA500'; // Laranja
+                alertBox.style.backgroundColor = '#FFA500';
                 document.getElementById('cockpit').style.borderColor = '#FFA500';
             } else {
                 alertBox.classList.add('low-risk');
                 icon.className = 'fas fa-check-circle';
-                alertBox.style.backgroundColor = '#4CAF50'; // Verde
+                alertBox.style.backgroundColor = '#4CAF50';
                 document.getElementById('cockpit').style.borderColor = '#4CAF50';
             }
         }
@@ -453,62 +293,42 @@
         function calculateDamage(diameter, velocity) {
             const mitigationPercent = parseInt(mitigationSlider.value) / 100;
             const mitigatedDiameter = diameter * (1 - mitigationPercent);
-
             const massKg = (Math.PI / 6) * Math.pow(mitigatedDiameter, 3) * 3000;
             const velocityMs = velocity * 1000;
-            const energyJ = 0.5 * massKg * Math.pow(velocityMs, 2); 
-            const energyMt = energyJ / 4.184e+15; 
-            
+            const energyJ = 0.5 * massKg * Math.pow(velocityMs, 2);
+            const energyMt = energyJ / 4.184e+15;
             const structuralRadiusKm = Math.round(5 * Math.log(energyMt + 1) + 15);
             const catastropheRadiusKm = Math.round(structuralRadiusKm / 4);
-
-            return {
-                energyMt: energyMt,
-                structural: structuralRadiusKm,
-                catastrophe: catastropheRadiusKm
-            };
+            return { energyMt: energyMt, structural: structuralRadiusKm, catastrophe: catastropheRadiusKm };
         }
 
         function calculatePopulationAtRisk(impactLat, impactLon, radiusKm) {
-            const areaKm2 = Math.PI * Math.pow(radiusKm, 2); 
+            const areaKm2 = Math.PI * Math.pow(radiusKm, 2);
             let isNearMajorCity = false;
             let density = regionDensity.low_density_area;
 
-            // 1. Checa se está perto de uma das Metrópoles (raio de 250km)
             majorCities.forEach(city => {
                 const p1 = Cesium.Cartographic.fromDegrees(impactLon, impactLat);
                 const p2 = Cesium.Cartographic.fromDegrees(city.lon, city.lat);
-                
                 const cartesian1 = viewer.scene.globe.ellipsoid.cartographicToCartesian(p1);
                 const cartesian2 = viewer.scene.globe.ellipsoid.cartographicToCartesian(p2);
                 const distanceKm = Cesium.Cartesian3.distance(cartesian1, cartesian2) / 1000;
-                
-                if (distanceKm < 250) { 
-                    isNearMajorCity = true;
-                }
+                if (distanceKm < 250) isNearMajorCity = true;
             });
-            
-            // 2. Define a Densidade de Risco
-            if (isNearMajorCity) {
-                density = regionDensity.high_density_area; 
-            } else if (impactLat > -40 && impactLat < 60) {
-                density = regionDensity.medium_density_area; 
-            }
 
-            // 3. Calcula o Risco
-            const totalRisk = Math.round(areaKm2 * density); 
+            if (isNearMajorCity) density = regionDensity.high_density_area;
+            else if (impactLat > -40 && impactLat < 60) density = regionDensity.medium_density_area;
 
-            // 4. Simulação de Oceano: Checa se o ponto está submerso
+            const totalRisk = Math.round(areaKm2 * density);
+
             const impactCartesian = Cesium.Cartesian3.fromDegrees(impactLon, impactLat);
             const height = viewer.scene.globe.getHeight(impactCartesian);
 
             if (height === undefined || height < 0) {
-                 // Risco máximo de 10k no oceano (simulação de navios/plataformas)
-                 return Math.min(10000, totalRisk * 0.01); 
+                return Math.min(10000, Math.round(totalRisk * 0.01));
             }
-            
-            // Retorna o risco, garantindo um mínimo para áreas continentais para fins de hackathon
-            return Math.max(10000, totalRisk); 
+
+            return Math.max(10000, totalRisk);
         }
 
         function drawDamageCircles(lat, lon, damages) {
@@ -527,14 +347,14 @@
                 position: Cesium.Cartesian3.fromDegrees(lon, lat),
                 name: 'Dano Estrutural',
                 ellipse: {
-                    semiMinorAxis: damages.structural * 1000, 
+                    semiMinorAxis: damages.structural * 1000,
                     semiMajorAxis: damages.structural * 1000,
                     material: Cesium.Color.YELLOW.withAlpha(0.3),
                     outline: true,
                     outlineColor: Cesium.Color.YELLOW
                 }
             });
-            
+
             viewer.entities.add({
                 position: Cesium.Cartesian3.fromDegrees(lon, lat),
                 name: 'Zona de Catástrofe',
@@ -548,79 +368,51 @@
             });
 
             viewer.camera.flyTo({
-                destination: Cesium.Cartesian3.fromDegrees(lon, lat, 500000), 
+                destination: Cesium.Cartesian3.fromDegrees(lon, lat, 500000),
                 duration: 2.5
             });
         }
-        
-        // NOVIDADE: Função para simular a saída de dados IOT/Webhook
-        function generateIotAlertUrl(riskLevel, population) {
+
+        function generateIotAlertUrl(population) {
+            if (!impactCoordinates) return;
             let alertLevel;
-            if (population > 500000) {
-                alertLevel = 5; 
-            } else if (population > 100000) {
-                alertLevel = 4; 
-            } else if (population > 10000) {
-                alertLevel = 3; 
-            } else {
-                alertLevel = 1; 
-            }
+            if (population > 500000) alertLevel = 5;
+            else if (population > 100000) alertLevel = 4;
+            else if (population > 10000) alertLevel = 3;
+            else alertLevel = 1;
 
             const statusUrl = `https://iot-alerts.com/data?lat=${impactCoordinates.lat.toFixed(2)}&lon=${impactCoordinates.lon.toFixed(2)}&level=${alertLevel}&pop=${population.toLocaleString('en')}`;
-            
+
             const iotDisplay = document.getElementById('iot-data-display');
             iotDisplay.innerHTML = `<p style="font-size: 0.9em; margin-top: 5px;">
-                <i class="fas fa-microchip"></i> **Nível de Alerta:** ${alertLevel} <br>
+                <i class="fas fa-microchip"></i> *Nível de Alerta:* ${alertLevel} <br>
                 <a href="${statusUrl}" target="_blank">Ver Endpoint de Dados (Webhook)</a>
             </p>`;
         }
-
 
         function runSimulation() {
             if (!impactCoordinates) {
                 updateAlertBox("Selecione um local no globo para iniciar a simulação.", undefined);
                 return;
             }
-            
-            const damages = calculateDamage(
-                currentAsteroidData.diameterMeters,
-                currentAsteroidData.velocityKms
-            );
-            
-            const populationAtRisk = calculatePopulationAtRisk(
-                impactCoordinates.lat,
-                impactCoordinates.lon,
-                damages.structural
-            );
 
-            drawDamageCircles(
-                impactCoordinates.lat, 
-                impactCoordinates.lon, 
-                damages
-            );
+            const damages = calculateDamage(currentAsteroidData.diameterMeters, currentAsteroidData.velocityKms);
+            const populationAtRisk = calculatePopulationAtRisk(impactCoordinates.lat, impactCoordinates.lon, damages.structural);
+
+            drawDamageCircles(impactCoordinates.lat, impactCoordinates.lon, damages);
 
             const riskSpan = document.getElementById('risk-population');
             riskSpan.textContent = populationAtRisk.toLocaleString('pt-BR');
             document.getElementById('risk-radius').textContent = `${damages.structural.toLocaleString('pt-BR')} km`;
 
             let alertMessage;
-            if (populationAtRisk > 500000) {
-                alertMessage = "ALERTA NÍVEL 5: RISCO EXTREMO. Atuação Imediata dos Tomadores de Decisão.";
-            } else if (populationAtRisk > 100000) {
-                alertMessage = "ALERTA NÍVEL 4: RISCO ALTO. Mobilização de equipes de Defesa Civil.";
-            } else {
-                alertMessage = "RISCO MODERADO. Dano limitado. Monitoramento contínuo.";
-            }
+            if (populationAtRisk > 500000) alertMessage = "ALERTA NÍVEL 5: RISCO EXTREMO. Atuação Imediata dos Tomadores de Decisão.";
+            else if (populationAtRisk > 100000) alertMessage = "ALERTA NÍVEL 4: RISCO ALTO. Mobilização de equipes de Defesa Civil.";
+            else alertMessage = "RISCO MODERADO. Dano limitado. Monitoramento contínuo.";
+
             updateAlertBox(alertMessage, populationAtRisk);
-            
-            // NOVO: Chama a função IoT para simular a saída de dados
-            generateIotAlertUrl(populationAtRisk, populationAtRisk);
+            generateIotAlertUrl(populationAtRisk);
         }
-
-
-        // ----------------------------------------------------
-        // 5. Lógica de Interação
-        // ----------------------------------------------------
 
         function setupInteractionHandlers() {
             const handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
@@ -628,39 +420,35 @@
             handler.setInputAction(function(click) {
                 const ray = viewer.camera.getPickRay(click.position);
                 const cartesian = viewer.scene.globe.pick(ray, viewer.scene);
-                
+
                 if (cartesian) {
                     const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
                     const impactLat = Cesium.Math.toDegrees(cartographic.latitude);
                     const impactLon = Cesium.Math.toDegrees(cartographic.longitude);
 
                     impactCoordinates = { lat: impactLat, lon: impactLon };
-                    
-                    document.getElementById('impact-location').textContent = `${impactLat.toFixed(4)}° N, ${impactLon.toFixed(4)}° E`;
+
+                    document.getElementById('impact-location').textContent = `${impactLat.toFixed(4)}°, ${impactLon.toFixed(4)}°`;
                     document.getElementById('location-display').style.display = 'block';
                     simulateButton.disabled = false;
-                    
+
                     viewer.entities.removeAll();
 
                     viewer.entities.add({
-                        position: Cesium.Cartesian3.fromDegrees(lon, lat),
+                        position: Cesium.Cartesian3.fromDegrees(impactLon, impactLat),
                         point: { pixelSize: 10, color: Cesium.Color.BLUE }
                     });
                 }
             }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
             simulateButton.addEventListener('click', runSimulation);
-            
+
             mitigationSlider.addEventListener('input', () => {
-                mitigationValueSpan.textContent = `${mitigationSlider.value}%`;
-                if (impactCoordinates) {
-                    runSimulation();
-                }
+                mitigationValueSpan.textContent = mitigationSlider.value + '%';
+                if (impactCoordinates) runSimulation();
             });
         }
 
-
-        // Inicia a aplicação
         initializeCesiumViewer();
     </script>
 </body>
