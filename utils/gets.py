@@ -1,6 +1,8 @@
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
+import json
+
 
 
 def get_asteroids_by_date(start_date=None, end_date=None, API_KEY="vUKEyppBObY9lqG1ALMj4ACX9Ff7rW4RyTnsjsiT" ):
@@ -35,7 +37,59 @@ def get_asteroids_by_date(start_date=None, end_date=None, API_KEY="vUKEyppBObY9l
     data = response.json()
     return data
 
+total_asteroids = get_asteroids_by_date()
 
-data = get_asteroids_by_date()
-print("Dados recebidos da NASA:")
-print(data)
+
+
+def get_asteroids_potentially_harmeous(total_asteroids):
+    harmeous = []
+
+    for asteorids in total_asteroids:
+        if ['is_potentially_hazardous_asteroid']:
+            harmeous.append(asteorids)
+
+    return harmeous
+
+
+def display_raw_asteroid_data():
+    api_response = get_asteroids_by_date('2013-02-14', '2013-02-16', API_KEY="vUKEyppBObY9lqG1ALMj4ACX9Ff7rW4RyTnsjsiT")
+    
+    # Extrai o dicionário que agrupa os asteroides por data
+    asteroids_by_date = api_response.get('near_earth_objects', {})
+
+    if not asteroids_by_date:
+        print("Nenhum asteroide encontrado no período especificado.")
+        return
+
+    print("--- INÍCIO DOS DADOS BRUTOS DOS ASTEROIDES ---")
+    
+    # Itera sobre os valores (listas de asteroides) no dicionário agrupado por data
+    for date, asteroid_list in asteroids_by_date.items():
+        print(f"\n>>>> DATA: {date} <<<<")
+        
+        # Itera sobre cada dicionário de asteroide individual na lista
+        for asteroid in asteroid_list:
+            # Opção 1 (Recomendada): Imprime formatado para ser mais legível
+            # 'indent=4' garante que a estrutura aninhada seja fácil de ler
+            # 1. Acesse a lista 'close_approach_data'
+            approach_data = asteroid.get('close_approach_data')
+
+            # 2. Acesse o primeiro item dessa lista (índice [0])
+            first_approach = approach_data[0]
+
+            # 3. Acesse o dicionário 'miss_distance' dentro desse item
+            miss_distance = first_approach.get('miss_distance')
+
+            # 4. Finalmente, pegue o valor 'kilometers'
+            distance_km = miss_distance.get('kilometers')
+
+            if asteroid.get('is_sentry_object') == True and float(distance_km) < 1000:#and asteroid.get("is_potentially_hazardous_asteroid") == True:
+            
+                print(json.dumps(asteroid , indent=4)) 
+            
+            # Opção 2: Imprime o dicionário Python na forma mais "crua" possível
+            # print(asteroid) 
+            
+            print("-" * 50) # Separador para facilitar a distinção entre asteroides
+
+    print("--- FIM DOS DADOS BRUTOS ---")
